@@ -1,6 +1,10 @@
 import pandas as pd
+import os
 
-filepath = '~/projects/mktresearch/vix/data/vix.csv'
+current_dir = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.join(current_dir, 'data')
+filepath = os.path.join(data_dir, 'vix.csv')
+
 df = pd.read_csv(filepath)
 df = df.drop_duplicates()
 
