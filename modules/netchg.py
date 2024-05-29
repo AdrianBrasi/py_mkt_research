@@ -1,5 +1,8 @@
+import pandas as pd
+
+
 # Create a df column of net chg in price open->close for each day
-def price_chg_intraday_column(df):
+def price_chg_intraday_column(df: pd.DataFrame):
     if df is None:
         raise ValueError("Enter the correct df")
 
@@ -7,7 +10,7 @@ def price_chg_intraday_column(df):
 
 
 # Create a df column of rolling net chg in price close->close for x days
-def price_chg_column(df, days):
+def price_chg_column(df: pd.DataFrame, days: int):
     if df is None:
         raise ValueError("Enter the correct df")
 
@@ -20,8 +23,8 @@ def price_chg_column(df, days):
 
 
 # Print one line to the console that tells you the
-# median close->close chg for x days
-def price_chg_median(df, days, flag, precision):
+# median close->close 1d chg for past x days
+def price_chg_median(df: pd.DataFrame, days: int, flag: int, precision: int):
     if df is None:
         raise ValueError("Enter the correct df")
 
@@ -35,18 +38,18 @@ def price_chg_median(df, days, flag, precision):
     if precision <= 0:
         raise ValueError("Decimal point precision should be => 1")
 
-    change = df['close'] - df['close'].shift(days)
+    one_day_change = df['close'] - df['close'].shift(1)
+
+    change = one_day_change[days:]
 
     if flag == 0:
-        median = change.median().round(precision)
-        print(f'Median {days} day return: {median}')
+        data_to_calculate = change
+    elif flag == 1:
+        data_to_calculate = change[change > 0]
+    else:
+        data_to_calculate = change[change < 0]
 
-    if flag == 1:
-        median = (change[change > 0]).median().round(precision)
-        print(f'Median {days} day positive return: {median}')
+    data_to_calculate = data_to_calculate.dropna()
+    median = data_to_calculate.median().round(precision)
 
-    if flag == -1:
-        median = (change[change < 0]).median().round(precision)
-        print(f'Median {days} day negative return: {median}')
-
-
+    return median

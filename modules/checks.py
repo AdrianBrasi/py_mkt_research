@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-def verify_df(df):
+def verify_df(df: pd.DataFrame):
     if df is None:
         raise TypeError("Invalid dataframe. Cannot perform operations. Check your .CSV")
     else:
@@ -21,7 +21,7 @@ def verify_df(df):
 
 # Basic cleanup and change 'time' column from ISO time to human-readable format
 # Just add your favorite pre-analysis adjustments to this function #
-def prepare_df(df):
+def prepare_df(df: pd.DataFrame):
     df = df.drop_duplicates(subset=['time'])
     df = df.dropna()
     pd.set_option('display.max_columns', None)

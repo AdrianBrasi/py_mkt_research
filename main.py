@@ -1,23 +1,20 @@
 ## DERIVITAVES MARKET DATA: USE AT YOUR OWN RISK ##
 
-# This is currently just some math in a .py file,
-# but it will eventually be an all-encompassing study
-# of one of the most important financial instruments
-# in the world: THE S&P500 VOLATILITY INDEX #
+# This project is starting to feel like it will
+# eventually mutate into an all-encompassing market
+# research library that can handle intra-day data,
+# any CSV, and maybe an API or two. It could possibly
+# have a nice comfy GUI with dropdown menus. #
 
-# The endgoal: A comfy GUI where you plug in a .CSV,
-# and chose what you want to know in a series of drop-down
-# menus. I will consider the possibility hooking this up to
-# different APIs. Whether this stays a standalone application,
-# or a website remains to be seen. I am unsure about the legal
-# implications of mixing FOSS with financial market data... #
+# At this current time I am exclusively using it to
+# study the S&P500 Volatility Index daily OHLC data #
 
 import os
 import pandas as pd
-import matplotlib.pyplot as plt
 
-import checks
-import netchg
+from modules import (checks,
+                     price_distribution,
+                     netchg)
 
 # Make filepath machine-independent
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -37,8 +34,12 @@ down_flag = -1  # pass to calculate only negative values
 
 # CALL FUNCTIONS BELOW THIS LINE #
 
-netchg.price_chg_median(df, 30, 0, 4)
-netchg.price_chg_column(df, 10)
-
-#print(df.head(20))
+# Quick examples of how to use some functions
+netchg.price_chg_column(df, 1)
+x = price_distribution.calculate_quantiles(df, 0.75)
+y = price_distribution.calculate_quantiles(df, 0.25)
+z = netchg.price_chg_median(df, 20, 0, 3)
+print("Third Quartile (whole dataset): ", x)
+print("First Quartile (whole dataset): ", y)
+print("Median 1d change for past 20 days: ", z)
 print(df.tail(20))
