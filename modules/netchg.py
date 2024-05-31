@@ -53,3 +53,19 @@ def price_chg_median(df: pd.DataFrame, days: int, flag: int, precision: int):
     median = data_to_calculate.median().round(precision)
 
     return median
+
+
+def chg_from_date_to_date(df: pd.DataFrame, start: str, end: str, pct=False):
+    if df is None:
+        raise ValueError("Enter vaild df")
+
+    start_index = df[df['time'] == start].index[0]
+    end_index = df[df['time'] == end].index[0]
+
+    if pct:
+        chg = (df.loc[end_index, 'close'] - df.loc[start_index, 'close']) / df.loc[start_index, 'close'] * 100
+    else:
+        chg = df.loc[end_index, 'close'] - df.loc[start_index, 'close']
+
+    return chg.round(3)
+

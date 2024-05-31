@@ -27,3 +27,4 @@ def prepare_df(df: pd.DataFrame):
     pd.set_option('display.max_columns', None)
     df['time'] = pd.to_datetime(df['time'])
     df['time'] = df['time'].dt.strftime('%Y %m %d')
+    df['time'] = df['time'].astype(str)
