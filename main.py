@@ -36,13 +36,12 @@ down_flag = -1  # pass to calculate only negative values
 # CALL FUNCTIONS BELOW THIS LINE #
 
 # Quick examples of how to use some functions
-#netchg.price_chg_column(df, 1)
-#x = price_distribution.calculate_quantiles(df, 0.75)
-#y = price_distribution.calculate_quantiles(df, 0.25)
-#z = netchg.price_chg_median(df, 20, 0, 3)
-#print("Third Quartile (whole dataset): ", x)
-#print("First Quartile (whole dataset): ", y)
-#print("Median 1d change for past 20 days: ", z)
-#print(df.tail(20))
-x = netchg.chg_from_date_to_date(df, "1998-04-15", "1998-04-16", pct=True)
-print(f'Change from Apr 15 1998 to Apr 16 1998: {x}%')
+netchg.price_chg_column(df, 1)
+x = price_distribution.calculate_quantiles(df, 0.75)
+y = price_distribution.calculate_quantiles(df, 0.25)
+z = netchg.price_chg_median(df, 20, 0, 3)
+print("Third Quartile (whole dataset): ", x)
+print("First Quartile (whole dataset): ", y)
+print("Median 1d change for past 20 days: ", z)
+print(df.tail(20))
+

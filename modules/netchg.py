@@ -56,6 +56,10 @@ def price_chg_median(df: pd.DataFrame, days: int, flag: int, precision: int):
 
 
 def chg_from_date_to_date(df: pd.DataFrame, start: str, end: str, pct=False):
+    if not df['time'].isin([start]).any():
+        raise ValueError("Start time invalid")
+    if not df['time'].isin([end]).any():
+        raise ValueError("Start time invalid")
     if df is None:
         raise ValueError("Enter vaild df")
 
