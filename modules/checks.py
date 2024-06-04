@@ -28,3 +28,4 @@ def prepare_df(df: pd.DataFrame):
     df['time'] = pd.to_datetime(df['time'])
     df['time'] = df['time'].dt.strftime('%Y %m %d')
     df['time'] = df['time'].astype(str)
+

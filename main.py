@@ -1,13 +1,17 @@
-## DERIVITAVES MARKET DATA: USE AT YOUR OWN RISK ##
+### DERIVITAVES MARKET DATA: USE AT YOUR OWN RISK ###
+
+# INSTRUCTIONS: Open a daily chart on tradingview,
+# scroll back as far as you want, then click 'export
+# chart data' in the top right dropdown menu. Select
+# ISO time. Move the .CSV to the 'data' subdirectory
+# in this project. Do not adjust the column names #
 
 # This project is starting to feel like it will
 # eventually mutate into an all-encompassing market
-# research library that can handle intra-day data,
-# any CSV, and maybe an API or two. It could possibly
+# research library that can handle intra-day data
+# from any Tradingview CSV. It could possibly
 # have a nice comfy GUI with dropdown menus. #
 
-# At this current time I am exclusively using it to
-# study the S&P500 Volatility Index daily OHLC data #
 
 import os
 import pandas as pd
@@ -15,17 +19,24 @@ import matplotlib.pyplot as plt
 
 from modules import (checks,
                      price_distribution,
-                     netchg)
+                     netchg,
+                     plots)
 
 # Make filepath machine-independent
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_dir = os.path.join(current_dir, 'data')
-filepath = os.path.join(data_dir, 'vix.csv')
 
-# Pandas dataframe
-df = pd.read_csv(filepath)
-checks.verify_df(df)
-checks.prepare_df(df)
+# Load all the .CSV files you want
+ndx_csv = os.path.join(data_dir, 'ndx.csv')
+spx_csv = os.path.join(data_dir, 'spx.csv')
+
+# Create and clean pandas dataframe
+ndx = pd.read_csv(ndx_csv)
+spx = pd.read_csv(spx_csv)
+checks.verify_df(ndx)
+checks.prepare_df(ndx)
+checks.verify_df(spx)
+checks.prepare_df(spx)
 
 # Flags for all functions that take 'flag' argument. These are
 # global variables that will be used in multiple modules #
@@ -35,13 +46,4 @@ down_flag = -1  # pass to calculate only negative values
 
 # CALL FUNCTIONS BELOW THIS LINE #
 
-# Quick examples of how to use some functions
-netchg.price_chg_column(df, 1)
-x = price_distribution.calculate_quantiles(df, 0.75)
-y = price_distribution.calculate_quantiles(df, 0.25)
-z = netchg.price_chg_median(df, 20, 0, 3)
-print("Third Quartile (whole dataset): ", x)
-print("First Quartile (whole dataset): ", y)
-print("Median 1d change for past 20 days: ", z)
-print(df.tail(20))
-
+plots.compare_two_instruments(spx, ndx)
