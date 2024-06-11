@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+from modules import netchg
 
 
 # Takes in two dataframes and slices the longer one to make sure that the
@@ -49,5 +50,18 @@ def compare_two_instruments(df1: pd.DataFrame,
         plt.plot(df1.index, df1['close'], label=f'{df1}', color='blue')
         plt.plot(df2.index, df2['close'], label=f'{df2}', color='red')
 
+    # Return of whole dataset
+    df1_return = netchg.calc_return(df1)
+    df2_return = netchg.calc_return(df2)
+    df1_return_text = f'pct chg of df1: {df1_return:.2f}%'
+    df2_return_text = f'pct chg of df2: {df2_return:.2f}%'
+
+    box = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+
+    ax = plt.gca()
+    ax.text(0.05, 0.95, df1_return_text + '\n' + df2_return_text,
+            transform=ax.transAxes, fontsize=30, verticalalignment='top', bbox=box)
+
+    plt.tight_layout()
     plt.show()
 

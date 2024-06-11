@@ -73,3 +73,6 @@ def chg_from_date_to_date(df: pd.DataFrame, start: str, end: str, pct=False):
 
     return chg.round(3)
 
+
+def calc_return(df):
+    return (df['close'].iloc[-1] / df['close'].iloc[0] -1 ) * 100

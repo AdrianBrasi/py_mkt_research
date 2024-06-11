@@ -1,6 +1,3 @@
-IT IS TIME to graduate from a spreadsheet bro who wears loafers and chews nicotine gum to a pythonista who wears sandals with
-no socks and chugs energy drinks! Your python research will make your co-workers quiver in their untailored businesswear.
-
 As an independent, uneducated futures trader, I've found myself doing the same research over and over again. 
 Rather than writing a bunch of redundant code
 and copying/pasting from other projects, I have begun to automate some of my research needs. The code in this
