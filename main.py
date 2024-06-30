@@ -29,14 +29,18 @@ data_dir = os.path.join(current_dir, 'data')
 # Load all the .CSV files you want
 ndx_csv = os.path.join(data_dir, 'ndx.csv')
 spx_csv = os.path.join(data_dir, 'spx.csv')
+vix_csv = os.path.join(data_dir, 'vix.csv')
 
 # Create and clean pandas dataframe
 ndx = pd.read_csv(ndx_csv)
 spx = pd.read_csv(spx_csv)
+vix = pd.read_csv(vix_csv)
 checks.verify_df(ndx)
 checks.prepare_df(ndx)
 checks.verify_df(spx)
 checks.prepare_df(spx)
+checks.verify_df(vix)
+checks.prepare_df(vix)
 
 # Flags for all functions that take 'flag' argument. These are
 # global variables that will be used in multiple modules #
@@ -46,4 +50,5 @@ down_flag = -1  # pass to calculate only negative values
 
 # CALL FUNCTIONS BELOW THIS LINE #
 
-plots.compare_two_instruments(spx, ndx)
+# plots.compare_two_instruments(spx, ndx)
+plots.plot_distribution(vix, all_days=True)

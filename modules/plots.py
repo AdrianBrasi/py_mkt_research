@@ -65,3 +65,29 @@ def compare_two_instruments(df1: pd.DataFrame,
     plt.tight_layout()
     plt.show()
 
+
+# This simply plots a histogram of closing prices for however many days
+# you want. This is not great for stocks that tend to have upward price
+# discovery over time. It is better suited for things like VIX, economic
+# data, and interest rates that tend to consistently fall into a range. #
+def plot_distribution(df: pd.DataFrame, days_back: int=1, all_days=False):
+    if df is None:
+        raise ValueError("Enter the correct df")
+    if days_back < 1:
+        raise ValueError("Days back should be a positive integer")
+
+    plt.figure(figsize=(20,20))
+
+    if all_days:
+        plt.hist(df['close'], bins='auto', color='#a9b1d6')
+        plt.title('All days in dataset')
+    else:
+        plt.hist(df['close'].tail(days_back), bins='auto', color='#a9b1d6')
+        plt.title(f'Last {days_back} days in dataset')
+
+    plt.grid(color='#292e42')
+    plt.gca().set_facecolor('#1f2335')
+    plt.xlabel('Close values', fontsize=14)
+    plt.ylabel('Frequency', fontsize=14)
+    plt.tight_layout()
+    plt.show()
