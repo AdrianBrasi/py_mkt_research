@@ -51,4 +51,5 @@ down_flag = -1  # pass to calculate only negative values
 # CALL FUNCTIONS BELOW THIS LINE #
 
 # plots.compare_two_instruments(spx, ndx)
-plots.plot_distribution(vix, all_days=True)
+#plots.plot_distribution(vix, all_days=True)
+plots.plot_chg_distribution(df1=spx, change_period=1, days_back=10)

@@ -1,22 +1,26 @@
+import warnings
 import pandas as pd
 
 
-def verify_df(df: pd.DataFrame):
-    if df is None:
+# Call this before you do anything with your dataframes.
+# If the warnings annoy you, delete or comment out the lines
+# pertaining to 'optional_columns'. Furthermore, you can add
+# required/optional columns as you please #
+def verify_df(df: pd.DataFrame) -> None:
+    if df is None or not isinstance(df, pd.DataFrame):
         raise TypeError("Invalid dataframe. Cannot perform operations. Check your .CSV")
-    else:
-        if 'open' not in df.columns:
-            raise ValueError("'open' does not exist. Check your data!")
-        if 'close' not in df.columns:
-            raise ValueError("'close' does not exist. Check your data!")
-        if 'low' not in df.columns:
-            raise ValueError("'low' does not exist. Check your data!")
-        if 'high' not in df.columns:
-            raise ValueError("'high' does not exist. Check your data!")
-        if 'time' not in df.columns:
-            raise ValueError("'time' does not exist. You may have 'date' instead of 'time'")
-        else:
-            return None
+
+    required_columns = ['open', 'high', 'low', 'close', 'time']
+
+    for column in required_columns:
+        if column not in df.columns:
+            raise ValueError(f'Required column: {column} is missing')
+
+    optional_columns = ['Volume', 'ATR']
+
+    for column in optional_columns:
+        if column not in df.columns:
+            warnings.warn(f'Optional column: {column} is missing')
 
 
 # Basic cleanup and change 'time' column from ISO time to human-readable format
@@ -28,4 +32,3 @@ def prepare_df(df: pd.DataFrame):
     df['time'] = pd.to_datetime(df['time'])
     df['time'] = df['time'].dt.strftime('%Y %m %d')
     df['time'] = df['time'].astype(str)
-

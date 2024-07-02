@@ -35,7 +35,7 @@ def compare_two_instruments(df1: pd.DataFrame,
     w_max = days_threshold_to_show_weekly_chart - 1
     m_min = days_threshold_to_show_monthly_chart
 
-    plt.figure(figsize=(20,20))
+    plt.figure(figsize=(20, 20))
     if w_min <= len(df1) <= w_max:
         df1_weekly = df1.resample('5D').last()
         df2_weekly = df2.resample('5D').last()
@@ -70,13 +70,15 @@ def compare_two_instruments(df1: pd.DataFrame,
 # you want. This is not great for stocks that tend to have upward price
 # discovery over time. It is better suited for things like VIX, economic
 # data, and interest rates that tend to consistently fall into a range. #
-def plot_distribution(df: pd.DataFrame, days_back: int=1, all_days=False):
+def plot_distribution(df: pd.DataFrame, days_back: int = 1, all_days=False):
     if df is None:
         raise ValueError("Enter the correct df")
     if days_back < 1:
         raise ValueError("Days back should be a positive integer")
+    if days_back > len(df):
+        raise ValueError("Days back cannot be greater than len(df)")
 
-    plt.figure(figsize=(20,20))
+    plt.figure(figsize=(20, 20))
 
     if all_days:
         plt.hist(df['close'], bins='auto', color='#a9b1d6')
@@ -91,3 +93,49 @@ def plot_distribution(df: pd.DataFrame, days_back: int=1, all_days=False):
     plt.ylabel('Frequency', fontsize=14)
     plt.tight_layout()
     plt.show()
+
+
+# Plot a histogram of the change values for 'x' periods for 'y' days back.
+# The default value for change_period is 1, as in 1 day. The function has
+# an optional arguments for another dataframe for comparison purposes. #
+def plot_chg_distribution(df1: pd.DataFrame, df2: pd.DataFrame = None,
+                          change_period: int = 1, days_back: int = 1,
+                          all_days=False):
+    if df1 is None:
+        raise ValueError("Enter at least one df")
+    if change_period > len(df1):
+        raise ValueError("Change period cannot be greater than len(df)")
+    if days_back < 1:
+        raise ValueError("Days back should be a positive integer")
+    if days_back > len(df1):
+        raise ValueError("Days back cannot be greater than len(df)")
+
+    plt.figure(figsize=(20, 20))
+
+    df1_chg = df1['close'].pct_change(periods=change_period)
+    if df2 is not None:
+        df2_chg = df2['close'].pct_change(periods=change_period)
+
+    if df2 is None:
+        if all_days:
+            plt.hist(df1_chg, bins='auto', alpha=0.5, color='#9bd16', label='df1_change')
+            plt.title(f'Distribution of {change_period} day changes for whole dataset')
+        else:
+            plt.hist(df1_chg.tail(days_back), bins='auto', color='#9bd16')
+            plt.title(f'Distribution of {change_period} day changes for last {days_back} days')
+
+    if df2 is not None:
+        if all_days:
+            plt.hist(df1_chg, bins='auto', alpha=0.5, color='#9bd16', label='df1_change')
+            plt.hist(df2_chg, bins='auto', alpha=0.5, color='#ff757f', label='df2_change')
+            plt.title(f'Comparison of {change_period} day changes for whole dataset')
+        else:
+            plt.hist(df1_chg.tail(days_back), bins='auto', color='#9bd16')
+            plt.hist(df2_chg.tail(days_back), bins='auto', color='#9bd16')
+            plt.title(f'Comparison of {change_period} day changes for last {days_back} days')
+
+    plt.legend(loc='upper right')
+    plt.tight_layout()
+    plt.show()
+
+#TODO: Fix this function. Currently plots a blank graph
