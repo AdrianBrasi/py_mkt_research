@@ -1,6 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 from modules import netchg
+from modules import price_distribution
 
 
 # Takes in two dataframes and slices the longer one to make sure that the
@@ -110,32 +112,38 @@ def plot_chg_distribution(df1: pd.DataFrame, df2: pd.DataFrame = None,
     if days_back > len(df1):
         raise ValueError("Days back cannot be greater than len(df)")
 
-    plt.figure(figsize=(20, 20))
+    fig = plt.figure(figsize=(20, 20))
 
     df1_chg = df1['close'].pct_change(periods=change_period)
+    df1_std = price_distribution.standard_deviation(df1, 1.00)
+    df1_2std = price_distribution.standard_deviation(df1, 2.00)
+
     if df2 is not None:
         df2_chg = df2['close'].pct_change(periods=change_period)
+        df2_std = price_distribution.standard_deviation(df2, 1.00)
+        df2_2std = price_distribution.standard_deviation(df2, 2.00)
 
     if df2 is None:
         if all_days:
-            plt.hist(df1_chg, bins='auto', alpha=0.5, color='#9bd16', label='df1_change')
+            plt.hist(df1_chg, bins='auto', alpha=0.7, color='#0082FF', label='df1_change')
             plt.title(f'Distribution of {change_period} day changes for whole dataset')
         else:
-            plt.hist(df1_chg.tail(days_back), bins='auto', color='#9bd16')
+            plt.hist(df1_chg.tail(days_back), color='#0082FF', bins='auto')
             plt.title(f'Distribution of {change_period} day changes for last {days_back} days')
 
     if df2 is not None:
         if all_days:
-            plt.hist(df1_chg, bins='auto', alpha=0.5, color='#9bd16', label='df1_change')
-            plt.hist(df2_chg, bins='auto', alpha=0.5, color='#ff757f', label='df2_change')
+            plt.hist(df1_chg, bins='auto', alpha=0.7, color='#0082FF', label='df1_change')
+            plt.hist(df2_chg, bins='auto', alpha=0.7, color='#8C00FF', label='df2_change')
             plt.title(f'Comparison of {change_period} day changes for whole dataset')
         else:
-            plt.hist(df1_chg.tail(days_back), bins='auto', color='#9bd16')
-            plt.hist(df2_chg.tail(days_back), bins='auto', color='#9bd16')
+            plt.hist(df1_chg.tail(days_back), alpha=0.7, color='#0082FF', bins='auto', label='df1')
+            plt.hist(df2_chg.tail(days_back), alpha=0.7, color='#8C00FF', bins='auto', label='df2')
             plt.title(f'Comparison of {change_period} day changes for last {days_back} days')
 
-    plt.legend(loc='upper right')
+    plt.gca().xaxis.set_major_formatter(mticker.PercentFormatter())
+    plt.tick_params(axis='x', which='major', labelsize=30)
+    plt.tick_params(axis='y', which='major', labelsize=30)
+    plt.legend(loc='upper right', fontsize=30)
     plt.tight_layout()
     plt.show()
-
-#TODO: Fix this function. Currently plots a blank graph

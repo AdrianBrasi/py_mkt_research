@@ -16,12 +16,6 @@ def verify_df(df: pd.DataFrame) -> None:
         if column not in df.columns:
             raise ValueError(f'Required column: {column} is missing')
 
-    optional_columns = ['Volume', 'ATR']
-
-    for column in optional_columns:
-        if column not in df.columns:
-            warnings.warn(f'Optional column: {column} is missing')
-
 
 # Basic cleanup and change 'time' column from ISO time to human-readable format
 # Just add your favorite pre-analysis adjustments to this function #

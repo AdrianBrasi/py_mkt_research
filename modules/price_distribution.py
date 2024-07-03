@@ -3,6 +3,7 @@
 # equations and matplotlilb graphs #
 
 import pandas as pd
+import numpy as np
 
 
 def calculate_median_close(df: pd.DataFrame, days_back: int, all_days=False):
@@ -61,3 +62,11 @@ def calculate_quantiles(df: pd.DataFrame, qtile: float):
     else:
         q: float = df['close'].quantile(qtile)
         return q
+
+
+def standard_deviation(df: pd.DataFrame, std: float = 1.00):
+    if df is None:
+        raise ValueError('Enter the df, dummy')
+    if std < 0.00:
+        raise ValueError('Standard deviation should be a positive number')
+    return np.std(df['close']) * std
